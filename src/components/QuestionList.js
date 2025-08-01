@@ -1,18 +1,8 @@
 import React from "react";
 import QuestionItem from "./QuestionItem";
 
-function QuestionList({ questions, setQuestions }) {
-  function handleDelete(id) {
-    const updated = questions.filter((q) => q.id !== id);
-    setQuestions(updated);
-  }
-
-  function handleUpdate(updatedQ) {
-    const updatedList = questions.map((q) =>
-      q.id === updatedQ.id ? updatedQ : q
-    );
-    setQuestions(updatedList);
-  }
+function QuestionList({ questions, onDelete, onUpdate }) {
+  if (!questions.length) return <p>Loading questions...</p>;
 
   return (
     <section>
@@ -22,8 +12,8 @@ function QuestionList({ questions, setQuestions }) {
           <QuestionItem
             key={question.id}
             question={question}
-            onDelete={handleDelete}
-            onUpdate={handleUpdate}
+            onDelete={onDelete}
+            onUpdate={onUpdate}
           />
         ))}
       </ul>

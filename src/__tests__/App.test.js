@@ -1,14 +1,9 @@
 import React from "react";
-import "whatwg-fetch";
-import {
-  fireEvent,
-  render,
-  screen,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import { server } from "../mocks/server";
+import "whatwg-fetch";
 
+import { server } from "../mocks/server";
 import App from "../components/App";
 
 beforeAll(() => server.listen());
@@ -86,9 +81,15 @@ test("updates the answer when the dropdown is changed", async () => {
     target: { value: "3" },
   });
 
-  expect(screen.queryAllByLabelText(/Correct Answer/)[0].value).toBe("3");
+  // Wait for the select's value to update to "3"
+  await waitFor(() => {
+    expect(screen.queryAllByLabelText(/Correct Answer/)[0].value).toBe("3");
+  });
 
   rerender(<App />);
 
-  expect(screen.queryAllByLabelText(/Correct Answer/)[0].value).toBe("3");
+  // Wait again after rerender for the value to be "3"
+  await waitFor(() => {
+    expect(screen.queryAllByLabelText(/Correct Answer/)[0].value).toBe("3");
+  });
 });
